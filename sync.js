@@ -12,12 +12,11 @@ const db = admin.firestore();
 // Function to upload a file to Firestore
 async function uploadFile(filePath, relativePath) {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
-  const components = relativePath.replace(/\//g, '_').split('_');
-  if (components.length % 2 !== 0) {
-    components.push('file');
-  }
-  const adjustedPath = components.join('_');
-  const fileRef = db.doc(adjustedPath);
+  // Treat the file name as the document ID and the path leading to it as the collection path
+  const pathParts = relativePath.split('/');
+  const fileName = pathParts.pop().replace(/\./g, '_'); // Replace dots in filenames to avoid Firestore issues
+  const collectionPath = pathParts.join('_').replace(/\./g, '_'); // Replace dots in collection paths
+  const fileRef = db.collection(collectionPath).doc(fileName);
   await fileRef.set({ content: fileContent });
 }
 
@@ -29,7 +28,7 @@ async function traverseDirectory(dir, relativePath = '') {
     const fileRelativePath = path.join(relativePath, file);
     if (fs.lstatSync(filePath).isDirectory()) {
       // Ignore .git directory and other unwanted directories
-      if (file !== '.git') {
+      if (!['.git', 'node_modules', '.github'].includes(file)) {
         await traverseDirectory(filePath, fileRelativePath);
       }
     } else {
@@ -40,6 +39,7 @@ async function traverseDirectory(dir, relativePath = '') {
     }
   }
 }
+
 // Start the upload process from the repository root
 traverseDirectory('.')
   .then(() => {
