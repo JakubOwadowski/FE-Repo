@@ -23,8 +23,8 @@ jobs:
 
       - name: Decode and write Firebase service account key
         env:
-          FIREBASE_SERVICE_ACCOUNT_BASE64: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: echo $FIREBASE_SERVICE_ACCOUNT_BASE64 | base64 --decode > firebase-service-account.json
+          FIREBASE_SERVICE_ACCOUNT_BASE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: echo $FIREBASE_SERVICE_ACCOUNT_BASE > firebase-service-account.json
 
       - name: Sync with Firebase
         run: node sync.js
