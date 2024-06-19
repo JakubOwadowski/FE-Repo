@@ -23,7 +23,7 @@ jobs:
 
       - name: Decode and write Firebase service account
         env:
-          FIREBASE_SERVICE_ACCOUNT_BASE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BASE6 
+          FIREBASE_SERVICE_ACCOUNT_BASE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BASE }}
         run: |
           echo $FIREBASE_SERVICE_ACCOUNT_BASE | base64 -d > firebase-service-account.json
           cat firebase-service-account.json  # Add this line to verify the JSON content
