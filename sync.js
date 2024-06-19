@@ -9,18 +9,16 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 
-// Function to upload a file to Firestore
-async function uploadFile(filePath, relativePath) {
-  const fileContent = fs.readFileSync(filePath, 'utf-8');
-  // Treat the file name as the document ID and the path leading to it as the collection path
-  const pathParts = relativePath.split('/');
-  const fileName = pathParts.pop().replace(/\./g, '_'); // Replace dots in filenames to avoid Firestore issues
-  const collectionPath = pathParts.join('_').replace(/\./g, '_'); // Replace dots in collection paths
-  const fileRef = db.collection(collectionPath).doc(fileName);
-  await fileRef.set({ content: fileContent });
+// Function to upload a file link to Firestore
+async function uploadFileLink(relativePath) {
+  const repoUrl = 'https://raw.githubusercontent.com/your-username/your-repo/main/'; // Adjust the URL according to your repo
+  const fileUrl = repoUrl + relativePath.split(path.sep).join('/');
+  const docPath = relativePath.replace(/\//g, '_').replace(/\./g, '_'); // Create a valid Firestore document path
+  const fileRef = db.collection('files').doc(docPath);
+  await fileRef.set({ url: fileUrl });
 }
 
-// Recursively traverse the directory and upload files
+// Recursively traverse the directory and upload file links
 async function traverseDirectory(dir, relativePath = '') {
   const files = fs.readdirSync(dir);
   for (const file of files) {
@@ -32,9 +30,9 @@ async function traverseDirectory(dir, relativePath = '') {
         await traverseDirectory(filePath, fileRelativePath);
       }
     } else {
-      // Ignore .git files and other unwanted files
-      if (!file.startsWith('.git')) {
-        await uploadFile(filePath, fileRelativePath);
+      // Process only .png and .gif files
+      if (file.endsWith('.png') || file.endsWith('.gif')) {
+        await uploadFileLink(fileRelativePath);
       }
     }
   }
