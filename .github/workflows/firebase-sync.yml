@@ -21,9 +21,11 @@ jobs:
       - name: Install dependencies
         run: npm install firebase-admin
 
-      - name: Sync with Firebase
+      - name: Decode and write Firebase service account
         env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_SERVICE_ACCOUNT_BASE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BASE }}
         run: |
-          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | jq '.' > firebase-service-account.json
-          node sync.js
+          echo $FIREBASE_SERVICE_ACCOUNT_BASE | base64 -d > firebase-service-account.json
+
+      - name: Sync with Firebase
+        run: node sync.js
