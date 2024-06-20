@@ -16,24 +16,21 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '18' # Or any other version you prefer
+        node-version: '18' # Upgrade to a compatible version
 
     - name: Install Firebase CLI
       run: npm install -g firebase-tools
 
     - name: Set up Firebase credentials
-      id: firebase-credentials
-      run: |
-        echo "${{ secrets.FIREBASE_PRIVATE_KEY }}" > firebase-key.json
+      run: echo "${{ secrets.FIREBASE_PRIVATE_KEY }}" > $GITHUB_WORKSPACE/firebase-key.json
 
     - name: Authenticate to Firebase
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase-key.json
-      run: |
-        firebase auth:import --project 413119107885
+        GOOGLE_APPLICATION_CREDENTIALS: $GITHUB_WORKSPACE/firebase-key.json
+      run: firebase projects:list # This will authenticate and verify access to Firebase project
 
     - name: Find and upload images
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase-key.json
+        GOOGLE_APPLICATION_CREDENTIALS: $GITHUB_WORKSPACE/firebase-key.json
       run: |
         find . -type f \( -iname "*.png" -o -iname "*.gif" \) -print0 | xargs -0 -I {} firebase storage:upload {} --path {}
