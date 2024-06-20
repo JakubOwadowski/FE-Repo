@@ -27,7 +27,7 @@ jobs:
     - name: Authenticate to Firebase
       env:
         GOOGLE_APPLICATION_CREDENTIALS: $GITHUB_WORKSPACE/firebase-key.json
-      run: firebase projects:list # This will authenticate and verify access to Firebase project
+      run: firebase projects:login # This will authenticate and verify access to Firebase project
 
     - name: Find and upload images
       env:
