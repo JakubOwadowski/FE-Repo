@@ -37,9 +37,9 @@ jobs:
         var serviceAccount = require('${HOME}/firebase-service-account.json');
         admin.initializeApp({
           credential: admin.credential.cert(serviceAccount)
-          storageBucket: '413119107885.appspot.com'
+          storageBucket: 'fe-repo.appspot.com'
         });
-          const bucket = storage.bucket('413119107885.appspot.com');
+          const bucket = storage.bucket('fe-repo.appspot.com');
         const firestore = admin.firestore();
 
         const directories = [
