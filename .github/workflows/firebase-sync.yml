@@ -36,7 +36,7 @@ jobs:
         var admin = require('firebase-admin');
         var serviceAccount = require('${HOME}/firebase-service-account.json');
         admin.initializeApp({
-          credential: admin.credential.cert(serviceAccount)
+          credential: admin.credential.cert(serviceAccount),
           databaseURL: 'https://fe-repo.firebaseio.com'
         });
         const firestore = admin.firestore();
