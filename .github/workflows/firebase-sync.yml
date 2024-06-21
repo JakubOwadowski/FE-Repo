@@ -38,5 +38,5 @@ jobs:
         admin.initializeApp({
           credential: admin.credential.cert(serviceAccount)
         });
-        // Your deployment code here
+        console.log('success!');
         "
