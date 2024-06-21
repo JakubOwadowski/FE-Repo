@@ -3,34 +3,20 @@ name: Firebase Upload
 on:
   push:
     branches:
-      - main # Change to your default branch if different
+      - main
+    # Optionally configure to run only for specific files. For example:
+    # paths:
+    # - "website/**"
 
 jobs:
-  upload-images:
+  deploy_live_website:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18' # Upgrade to a compatible version
-
-    - name: Install Firebase CLI
-      run: npm install -g firebase-tools
-
-    - name: Set up Firebase credentials
-      run: echo "${{ secrets.FIREBASE_PRIVATE_KEY }}" > $GITHUB_WORKSPACE/firebase-key.json
-
-    - name: Authenticate to Firebase
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: $GITHUB_WORKSPACE/firebase-key.json
-      run: firebase projects:login # This will authenticate and verify access to Firebase project
-
-    - name: Find and upload images
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: $GITHUB_WORKSPACE/firebase-key.json
-      run: |
-        find . -type f \( -iname "*.png" -o -iname "*.gif" \) -print0 | xargs -0 -I {} firebase storage:upload {} --path {}
+      - uses: actions/checkout@v4
+      # Add any build steps here. For example:
+      # - run: npm ci && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          projectId: 413119107885
+          channelId: live
