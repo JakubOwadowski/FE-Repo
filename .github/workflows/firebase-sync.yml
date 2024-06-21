@@ -37,6 +37,74 @@ jobs:
         var serviceAccount = require('${HOME}/firebase-service-account.json');
         admin.initializeApp({
           credential: admin.credential.cert(serviceAccount)
+          storageBucket: '413119107885.appspot.com'
         });
-        console.log('success!');
+          const bucket = storage.bucket('413119107885.appspot.com');
+        const firestore = admin.firestore();
+
+        const directories = [
+          'BGs',
+          'Interface Elements',
+          'Class Cards',
+          'Item Icons',
+          'Map Sprites',
+          'Portrait Repository',
+          'Battle Animations'
+        ];
+
+        const isTargetFile = (filePath, directory) => {
+          const ext = path.extname(filePath);
+          const base = path.basename(filePath);
+          if (['BGs', 'Interface Elements', 'Class Cards', 'Item Icons', 'Map Sprites', 'Portrait Repository'].includes(directory)) {
+            return ext === '.png';
+          } else if (directory === 'Battle Animations') {
+            return ext === '.gif' || (ext === '.png' && base.includes('_000'));
+          }
+          return false;
+        };
+        const getFiles = (dir, directory) => {
+          let results = [];
+          const list = fs.readdirSync(dir);
+          list.forEach(file => {
+            file = path.join(dir, file);
+            const stat = fs.statSync(file);
+            if (stat && stat.isDirectory()) {
+              results = results.concat(getFiles(file, directory));
+            } else {
+              if (isTargetFile(file, directory)) {
+                results.push(file);
+              }
+            }
+          });
+          return results;
+        };
+        const uploadFile = async (filePath) => {
+          await bucket.upload(filePath, {
+            destination: filePath,
+            public: true,
+            metadata: {
+              cacheControl: 'public, max-age=31536000'
+            }
+          });
+          const file = bucket.file(filePath);
+          const [url] = await file.getSignedUrl({
+            action: 'read',
+            expires: '03-09-2491'
+          });
+          return url;
+        };
+
+        const main = async () => {
+          let fileData = {};
+          for (const dir of directories) {
+            const files = getFiles(dir, dir);
+            for (const file of files) {
+              const url = await uploadFile(file);
+              fileData[file] = url;
+            }
+          }
+          await firestore.collection('repository_structure').doc('files').set(fileData);
+          console.log('Document created successfully in Firestore!');
+        };
+        main().catch(console.error);
         "
