@@ -24,7 +24,7 @@ jobs:
     - name: Authenticate to Firebase
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-      run: firebase login:ci --token $FIREBASE_TOKEN
+      run: firebase login:ci
 
     - name: Find and upload images
       run: |
