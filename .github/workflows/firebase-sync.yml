@@ -81,7 +81,7 @@ jobs:
           const fileName = path.basename(filePath);
           consle.log('downloadUrl');
           consle.log(`https://raw.githubusercontent.com/JakubOwadowski/FE-Repo/refs/heads/main/${relativePath}`);
-          const downloadUrl = `https://raw.githubusercontent.com/JakubOwadowski/FE-Repo/refs/heads/main/${relativePath}`;
+          //const downloadUrl = `https://raw.githubusercontent.com/JakubOwadowski/FE-Repo/refs/heads/main/${relativePath}`;
 
           //await firestore.collection(directory).add({
           //  filename: fileName,
