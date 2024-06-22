@@ -42,8 +42,7 @@ jobs:
         const firestore = admin.firestore();
 
         const directories = [
-          'BGs',
-          'Interface Elements',
+          'BGs, Interface Elements',
           'Class Cards',
           'Item Icons',
           'Map Sprites',
@@ -54,7 +53,7 @@ jobs:
         const isTargetFile = (filePath, directory) => {
           const ext = path.extname(filePath);
           const base = path.basename(filePath);
-          if (['BGs', 'Interface Elements', 'Class Cards', 'Item Icons', 'Map Sprites', 'Portrait Repository'].includes(directory)) {
+          if (['BGs, Interface Elements', 'Class Cards', 'Item Icons', 'Map Sprites', 'Portrait Repository'].includes(directory)) {
             return ext === '.png';
           } else if (directory === 'Battle Animations') {
             return ext === '.gif' || (ext === '.png' && base.includes('_000'));
