@@ -83,10 +83,10 @@ jobs:
           consle.log(`https://raw.githubusercontent.com/JakubOwadowski/FE-Repo/refs/heads/main/${relativePath}`);
           const downloadUrl = `https://raw.githubusercontent.com/JakubOwadowski/FE-Repo/refs/heads/main/${relativePath}`;
 
-          await firestore.collection(directory).add({
-            filename: fileName,
-            url: downloadUrl
-          });
+          //await firestore.collection(directory).add({
+          //  filename: fileName,
+          //  url: downloadUrl
+          //});
         };
 
         (async () => {
