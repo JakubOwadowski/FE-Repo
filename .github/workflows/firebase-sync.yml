@@ -80,7 +80,7 @@ jobs:
         const uploadToFirebase = async (directory, filePath) => {
           const relativePath = path.relative(process.cwd(), filePath);
           const fileName = path.basename(filePath);
-          const downloadUrl = \`https://raw.githubusercontent.com/${secrets.REPOSITORY_NAME}/${secrets.REPOSITORY_REF.replace('refs/heads/', '')}/${relativePath}\`;
+          const downloadUrl = \`https://raw.githubusercontent.com/JakubOwadowski/FE-Repo/refs/heads/main', '')}/${relativePath}\`;
 
           await firestore.collection(directory).add({
             filename: fileName,
