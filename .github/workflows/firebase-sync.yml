@@ -93,9 +93,10 @@ jobs:
           for (const directory of directories) {
             console.log(directory);
             const files = getFiles(directory, directory);
-            //for (const file of files) {
+            for (const file of files) {
+                console.log(file)
             //  await uploadToFirebase(directory, file);
-           // }
+           }
           }
           console.log('Files successfully uploaded to Firebase.');
         })();
