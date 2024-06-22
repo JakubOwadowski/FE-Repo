@@ -91,10 +91,11 @@ jobs:
 
         (async () => {
           for (const directory of directories) {
-            const files = getFiles(directory, directory);
-            for (const file of files) {
-              await uploadToFirebase(directory, file);
-            }
+            console.log(directory);
+            //const files = getFiles(directory, directory);
+            //for (const file of files) {
+            //  await uploadToFirebase(directory, file);
+           // }
           }
           console.log('Files successfully uploaded to Firebase.');
         })();
